@@ -54,54 +54,59 @@ public struct AnalyticalEphemerisProvider: EphemerisProvider, Sendable {
         case .earth:
             let earth = Earth(julianDay: jd, highPrecision: true)
             let ecliptic = earth.heliocentricEclipticCoordinates
-            let lon = ecliptic.celestialLongitude.inRadians.value
-            let lat = ecliptic.celestialLatitude.inRadians.value
-            let r = earth.radiusVector.value
-            let cosLat = cos(lat)
-            // Convert ecliptic to equatorial using the obliquity of the ecliptic
             let obliquity = Earth(julianDay: jd).obliquityOfEcliptic(mean: true).inRadians.value
-            let xEcl = r * cosLat * cos(lon)
-            let yEcl = r * cosLat * sin(lon)
-            let zEcl = r * sin(lat)
-            let xEq = xEcl
-            let yEq = yEcl * cos(obliquity) - zEcl * sin(obliquity)
-            let zEq = yEcl * sin(obliquity) + zEcl * cos(obliquity)
-            return Vector3D(x: xEq, y: yEq, z: zEq)
+            return Self.eclipticToEquatorial(
+                longitude: ecliptic.celestialLongitude.inRadians.value,
+                latitude: ecliptic.celestialLatitude.inRadians.value,
+                radius: earth.radiusVector.value,
+                obliquity: obliquity
+            )
 
         case .mercury, .venus, .mars, .jupiter, .saturn, .uranus, .neptune:
             guard let planet = body.makeObject(julianDay: jd, highPrecision: true) as? Planet else {
                 throw EphemerisError.bodyNotSupported(body)
             }
             let ecliptic = planet.heliocentricEclipticCoordinates
-            let lon = ecliptic.celestialLongitude.inRadians.value
-            let lat = ecliptic.celestialLatitude.inRadians.value
-            let r = planet.radiusVector.value
-            let cosLat = cos(lat)
             let obliquity = Earth(julianDay: jd).obliquityOfEcliptic(mean: true).inRadians.value
-            let xEcl = r * cosLat * cos(lon)
-            let yEcl = r * cosLat * sin(lon)
-            let zEcl = r * sin(lat)
-            let xEq = xEcl
-            let yEq = yEcl * cos(obliquity) - zEcl * sin(obliquity)
-            let zEq = yEcl * sin(obliquity) + zEcl * cos(obliquity)
-            return Vector3D(x: xEq, y: yEq, z: zEq)
+            return Self.eclipticToEquatorial(
+                longitude: ecliptic.celestialLongitude.inRadians.value,
+                latitude: ecliptic.celestialLatitude.inRadians.value,
+                radius: planet.radiusVector.value,
+                obliquity: obliquity
+            )
 
         case .pluto:
             let pluto = Pluto(julianDay: jd, highPrecision: true)
             let ecliptic = pluto.heliocentricEclipticCoordinates
-            let lon = ecliptic.celestialLongitude.inRadians.value
-            let lat = ecliptic.celestialLatitude.inRadians.value
-            let r = pluto.radiusVector.value
-            let cosLat = cos(lat)
             let obliquity = Earth(julianDay: jd).obliquityOfEcliptic(mean: true).inRadians.value
-            let xEcl = r * cosLat * cos(lon)
-            let yEcl = r * cosLat * sin(lon)
-            let zEcl = r * sin(lat)
-            let xEq = xEcl
-            let yEq = yEcl * cos(obliquity) - zEcl * sin(obliquity)
-            let zEq = yEcl * sin(obliquity) + zEcl * cos(obliquity)
-            return Vector3D(x: xEq, y: yEq, z: zEq)
+            return Self.eclipticToEquatorial(
+                longitude: ecliptic.celestialLongitude.inRadians.value,
+                latitude: ecliptic.celestialLatitude.inRadians.value,
+                radius: pluto.radiusVector.value,
+                obliquity: obliquity
+            )
         }
+    }
+
+    // MARK: - Coordinate Transformation
+
+    /// Converts spherical heliocentric ecliptic coordinates to equatorial Cartesian coordinates (ICRS/J2000).
+    private static func eclipticToEquatorial(
+        longitude: Double,
+        latitude: Double,
+        radius: Double,
+        obliquity: Double
+    ) -> Vector3D {
+        let cosLat = cos(latitude)
+        let xEcl = radius * cosLat * cos(longitude)
+        let yEcl = radius * cosLat * sin(longitude)
+        let zEcl = radius * sin(latitude)
+        let cosObl = cos(obliquity)
+        let sinObl = sin(obliquity)
+        let xEq = xEcl
+        let yEq = yEcl * cosObl - zEcl * sinObl
+        let zEq = yEcl * sinObl + zEcl * cosObl
+        return Vector3D(x: xEq, y: yEq, z: zEq)
     }
 
     /// State vector approximation using numerical differentiation.

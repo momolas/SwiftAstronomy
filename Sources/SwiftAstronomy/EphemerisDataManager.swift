@@ -245,6 +245,14 @@ private extension URLSession {
         FileManager.default.createFile(atPath: tempURL.path, contents: nil)
 
         let fileHandle = try FileHandle(forWritingTo: tempURL)
+        var succeeded = false
+        defer {
+            if !succeeded {
+                try? fileHandle.close()
+                try? FileManager.default.removeItem(at: tempURL)
+            }
+        }
+
         var totalWritten: Int64 = 0
         let bufferSize = 65536
         var buffer = Data()
@@ -253,6 +261,7 @@ private extension URLSession {
         for try await byte in asyncBytes {
             buffer.append(byte)
             if buffer.count >= bufferSize {
+                try Task.checkCancellation()
                 try fileHandle.write(contentsOf: buffer)
                 totalWritten += Int64(buffer.count)
                 progress(totalWritten, expectedLength)
@@ -262,12 +271,14 @@ private extension URLSession {
 
         // Write remaining bytes
         if !buffer.isEmpty {
+            try Task.checkCancellation()
             try fileHandle.write(contentsOf: buffer)
             totalWritten += Int64(buffer.count)
             progress(totalWritten, expectedLength)
         }
 
         try fileHandle.close()
+        succeeded = true
         return (tempURL, response)
     }
 }

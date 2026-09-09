@@ -275,6 +275,12 @@ public:
     PLUTO = 8
   };
 
+//Constructors / Destructors
+  CAAVSOP2013();
+  ~CAAVSOP2013();
+  CAAVSOP2013(const CAAVSOP2013&) = default;
+  CAAVSOP2013& operator=(const CAAVSOP2013&) = default;
+
 //Methods
   void SetBinaryFilesDirectory(const std::filesystem::path::value_type* pszBinaryFilesDirectory) noexcept;
   [[nodiscard]] const std::filesystem::path::value_type* GetBinaryFilesDirectory() const noexcept;
@@ -309,5 +315,7 @@ protected:
 #endif //#ifdef _WIN32
 };
 
+AAPLUS_EXT_CLASS CAAVSOP2013* CAAVSOP2013Create();
+AAPLUS_EXT_CLASS void CAAVSOP2013Destroy(CAAVSOP2013* p);
 
 #endif //#ifndef __AAVSOP2013_H__

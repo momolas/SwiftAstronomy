@@ -20,6 +20,25 @@ public enum EphemerisError: Error, Sendable {
     case dataFileNotFound(String)
     /// A data file exists but is corrupted or has an unexpected format.
     case dataCorrupted(String)
+    /// An internal calculation failed or an underlying engine could not be initialized.
+    case calculationFailed(String)
+}
+
+extension EphemerisError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .bodyNotSupported(let body):
+            return "Solar system body \(body.name) is not supported by this ephemeris provider."
+        case .dateOutOfRange(let jd):
+            return "Julian Day \(jd.value) is outside the valid range for this ephemeris provider."
+        case .dataFileNotFound(let path):
+            return "Required ephemeris data file not found at path: \(path)"
+        case .dataCorrupted(let reason):
+            return "Ephemeris data file is corrupted or invalid: \(reason)"
+        case .calculationFailed(let reason):
+            return "Ephemeris calculation failed: \(reason)"
+        }
+    }
 }
 
 // MARK: - Protocol

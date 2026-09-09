@@ -22,9 +22,25 @@ struct EphemerisProviderProtocolTests {
             .bodyNotSupported(.pluto),
             .dateOutOfRange(jd),
             .dataFileNotFound("/missing/file.bin"),
-            .dataCorrupted("bad data")
+            .dataCorrupted("bad data"),
+            .calculationFailed("internal solver error")
         ]
-        #expect(errors.count == 4)
+        #expect(errors.count == 5)
+    }
+
+    @Test("EphemerisError conforms to LocalizedError with descriptive text")
+    func localizedErrorDescriptions() {
+        let jd = JulianDay(2451545.0)
+        let errors: [(EphemerisError, String)] = [
+            (.bodyNotSupported(.pluto), "Pluto"),
+            (.dateOutOfRange(jd), "2451545"),
+            (.dataFileNotFound("/missing/file.bin"), "/missing/file.bin"),
+            (.dataCorrupted("bad header"), "bad header"),
+            (.calculationFailed("internal solver error"), "internal solver error")
+        ]
+        for (error, substring) in errors {
+            #expect(error.errorDescription?.contains(substring) == true)
+        }
     }
 
     @Test("AnalyticalEphemerisProvider conforms to EphemerisProvider")
@@ -200,13 +216,13 @@ struct EphemerisDataManagerTests {
     @Test("Default cache directory is in Caches/SwiftAstronomy")
     func defaultCacheDirectory() async {
         let manager = EphemerisDataManager()
-        let path = await manager.cacheDirectory.path(percentEncoded: false)
+        let path = await manager.cacheDirectory.path
         #expect(path.contains("SwiftAstronomy"))
     }
 
     @Test("Custom cache directory is respected")
     func customCacheDirectory() async {
-        let customDir = FileManager.default.temporaryDirectory.appending(path: "TestEphemeris")
+        let customDir = FileManager.default.temporaryDirectory.appendingPathComponent("TestEphemeris")
         let manager = EphemerisDataManager(cacheDirectory: customDir)
         let dir = await manager.cacheDirectory
         #expect(dir == customDir)
@@ -214,7 +230,7 @@ struct EphemerisDataManagerTests {
 
     @Test("isAvailable returns false for non-downloaded datasets")
     func isAvailableFalse() async {
-        let tempDir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let manager = EphemerisDataManager(cacheDirectory: tempDir)
         let available = await manager.isAvailable(.lunarDE440s)
         #expect(!available)
@@ -222,7 +238,7 @@ struct EphemerisDataManagerTests {
 
     @Test("cacheSize returns zero for empty cache")
     func emptyCacheSize() async throws {
-        let tempDir = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let manager = EphemerisDataManager(cacheDirectory: tempDir)
         let size = try await manager.cacheSize()
         #expect(size == 0)

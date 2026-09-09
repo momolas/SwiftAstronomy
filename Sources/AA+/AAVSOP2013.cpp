@@ -706,7 +706,7 @@ void CAAVSOP2013::CalculateLambdas(double T, std::array<double, 17>& lambdas) no
   lambdas[10] = 0.874018510107 + (213.2990861084880*T); //Saturn
   lambdas[11] = 5.481225395663 + (74.78165903077800*T); //Uranus
   lambdas[12] = 5.311897933164 + (38.13297222612500*T); //Neptune
-  lambdas[13] = 0.3595362285049309*T; //µ Pluto
+  lambdas[13] = 0.3595362285049309*T; //Âµ Pluto
   lambdas[14] = 5.198466400630 + (77713.7714481804*T); //D Moon
   lambdas[15] = 1.627905136020 + (84334.6615717837*T); //F Moon
   lambdas[16] = 2.355555638750 + (83286.9142477147*T); //l Moon
@@ -775,4 +775,17 @@ CAAVSOP2013Position CAAVSOP2013::Ecliptic2Equatorial(const CAAVSOP2013Position& 
   Equatorial.Y_DASH = (coeff21*value.X_DASH) + (coeff22*value.Y_DASH) + (coeff23*value.Z_DASH);
   Equatorial.Z_DASH = (coeff32*value.Y_DASH) + (coeff33*value.Z_DASH);
   return Equatorial;
+}
+
+CAAVSOP2013::CAAVSOP2013() = default;
+CAAVSOP2013::~CAAVSOP2013() = default;
+
+CAAVSOP2013* CAAVSOP2013Create()
+{
+  return new CAAVSOP2013();
+}
+
+void CAAVSOP2013Destroy(CAAVSOP2013* p)
+{
+  delete p;
 }

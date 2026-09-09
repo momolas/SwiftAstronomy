@@ -21,6 +21,9 @@ import AAplus
 /// - Note: The Moon and Sun are not directly supported by VSOP2013. For the Moon, use
 ///   ``LunarDE440Provider`` or ``HybridEphemerisProvider``. The Sun position is derived
 ///   by negating the Earth-Moon Barycenter position.
+/// - Thread Safety: Conforms to `Sendable` via `@unchecked Sendable`. Access to the underlying
+///   `CAAVSOP2013` instance (which lazy-loads Chebyshev tables into internal arrays) is protected
+///   by an internal `NSLock`, ensuring thread-safe access across concurrent Swift tasks.
 public final class VSOP2013Provider: @unchecked Sendable {
 
     // MARK: - Properties
@@ -30,6 +33,9 @@ public final class VSOP2013Provider: @unchecked Sendable {
 
     /// The underlying C++ VSOP2013 engine, heap-allocated to keep the constructor in the C++ object.
     private let vsop2013: UnsafeMutablePointer<CAAVSOP2013>
+
+    /// Synchronization lock for thread-safe access to the C++ calculation engine.
+    private let lock = NSLock()
 
     // MARK: - Initialization
 
@@ -44,14 +50,15 @@ public final class VSOP2013Provider: @unchecked Sendable {
         guard FileManager.default.fileExists(atPath: path) else {
             throw EphemerisError.dataFileNotFound(path)
         }
-        self.vsop2013 = .allocate(capacity: 1)
-        vsop2013.initialize(to: CAAVSOP2013())
+        guard let instance = CAAVSOP2013Create() else {
+            throw EphemerisError.calculationFailed("Failed to allocate CAAVSOP2013 instance")
+        }
+        self.vsop2013 = instance
         vsop2013.pointee.SetBinaryFilesDirectory(path)
     }
 
     deinit {
-        vsop2013.deinitialize(count: 1)
-        vsop2013.deallocate()
+        CAAVSOP2013Destroy(vsop2013)
     }
 
     // MARK: - Planet Mapping
@@ -74,21 +81,17 @@ public final class VSOP2013Provider: @unchecked Sendable {
         }
     }
 
-    // MARK: - Internal Calculation
+    // MARK: - Calculation Helpers
 
-    /// Computes the raw VSOP2013 position for a planet at the given Julian Day.
+    /// Computes the equatorial rectangular coordinates (X, Y, Z, X', Y', Z') for a VSOP planet.
     ///
     /// The returned position is in the ecliptic frame of J2000.0. VSOP2013 internally
     /// converts to equatorial (ICRS) via `Ecliptic2Equatorial`.
-    private func calculateEquatorial(planet: CAAVSOP2013.Planet, jd: Double) throws -> CAAVSOP2013Position {
-        do {
-            let ecliptic = vsop2013.pointee.Calculate(planet, jd)
-            return CAAVSOP2013.Ecliptic2Equatorial(ecliptic)
-        } catch {
-            throw EphemerisError.dataFileNotFound(
-                "VSOP2013 binary files missing or invalid in \(dataDirectoryURL.path)"
-            )
-        }
+    private func calculateEquatorial(planet: CAAVSOP2013.Planet, jd: Double) -> CAAVSOP2013Position {
+        lock.lock()
+        defer { lock.unlock() }
+        let ecliptic = vsop2013.pointee.Calculate(planet, jd)
+        return CAAVSOP2013.Ecliptic2Equatorial(ecliptic)
     }
 }
 
@@ -113,7 +116,7 @@ extension VSOP2013Provider: EphemerisProvider {
             guard let planet = Self.vsop2013Planet(for: body) else {
                 throw EphemerisError.bodyNotSupported(body)
             }
-            let pos = try calculateEquatorial(planet: planet, jd: jd.value)
+            let pos = calculateEquatorial(planet: planet, jd: jd.value)
             return Vector3D(x: pos.X, y: pos.Y, z: pos.Z)
         }
     }
@@ -129,7 +132,7 @@ extension VSOP2013Provider: EphemerisProvider {
             guard let planet = Self.vsop2013Planet(for: body) else {
                 throw EphemerisError.bodyNotSupported(body)
             }
-            let pos = try calculateEquatorial(planet: planet, jd: jd.value)
+            let pos = calculateEquatorial(planet: planet, jd: jd.value)
             return StateVector(
                 position: Vector3D(x: pos.X, y: pos.Y, z: pos.Z),
                 velocity: Vector3D(x: pos.X_DASH, y: pos.Y_DASH, z: pos.Z_DASH)
