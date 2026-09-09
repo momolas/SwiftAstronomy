@@ -8,11 +8,11 @@
 
 import Foundation
 
-open class AstronomicalObject: ObjectBase, CelestialBody {
-    public var name: String = ""
-    public fileprivate(set) var julianDay: JulianDay
-    public fileprivate(set) var highPrecision: Bool
-    public fileprivate(set) var equatorialCoordinates: EquatorialCoordinates
+public final class AstronomicalObject: ObjectBase, CelestialBody, @unchecked Sendable {
+    public let name: String
+    public let julianDay: JulianDay
+    public let highPrecision: Bool
+    public let equatorialCoordinates: EquatorialCoordinates
 
     public init(name: String, coordinates: EquatorialCoordinates, julianDay: JulianDay, highPrecision: Bool = true) {
         self.name = name

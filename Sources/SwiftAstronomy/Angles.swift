@@ -103,7 +103,7 @@ public struct ArcMinute: NumericType, CustomStringConvertible {
     /// Transform the current ArcMinute in Hours
     public var inHours: Hour { return inDegrees.inHours }
     
-    public var description: String { return String(format: "%.2f arcmin", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) arcmin" }
 }
 
 // MARK: -
@@ -145,7 +145,7 @@ public struct ArcSecond: NumericType, CustomStringConvertible {
         return AstronomicalUnit(CAAParallax.ParallaxToDistance(inDegrees.value))
     }
 
-    public var description: String { return String(format: "%.2f arcsec", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) arcsec" }
 }
 
 // MARK: -
@@ -172,6 +172,6 @@ public struct Radian: NumericType, CustomStringConvertible {
     /// Returns self reduced to -pi..<pi range (around 0)
     public var reduced0: Radian { return Radian(value.zeroCenteredTruncatingRemainder(dividingBy: 2*Double.pi)) }
     
-    public var description: String { return String(format: "%.3f rad", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(3)))) rad" }
 }
 

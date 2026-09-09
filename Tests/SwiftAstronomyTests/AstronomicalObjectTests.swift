@@ -9,6 +9,7 @@
 import XCTest
 @testable import SwiftAstronomy
 
+@MainActor
 class AstronomicalObjectTests: XCTestCase {
 
     func testDummyRadiusVector() {

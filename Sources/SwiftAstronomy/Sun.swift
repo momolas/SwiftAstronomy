@@ -10,7 +10,7 @@ import Foundation
 @_exported import AAplus
 
 /// The Sun.
-public class Sun: Object, CelestialBody {
+public final class Sun: Object, @unchecked Sendable, CelestialBody {
     
     /// Accessor to all values of the underlying physical details. Will probably become private
     /// once all relevant accessors are implemented and covered.

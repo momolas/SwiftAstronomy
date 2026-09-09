@@ -33,7 +33,7 @@ public struct Day: NumericType, CustomStringConvertible {
     public var inJulianDays: JulianDay { return JulianDay(value) }
     
     /// The standard description of the Day
-    public var description: String { return String(format: "%.2f d", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) d" }
 }
 
 /// The Hour is a number representing an Earth hour.
@@ -127,7 +127,7 @@ public struct Minute: NumericType, CustomStringConvertible {
     public var reduced: Minute { return Minute(value.positiveTruncatingRemainder(dividingBy: 60.0)) }
     
     /// The standard description of the Hour
-    public var description: String { return String(format: "%.2f min", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) min" }
 }
 
 // MARK: -
@@ -158,6 +158,6 @@ public struct Second: NumericType, CustomStringConvertible {
     public var reduced: Second { return Second(value.positiveTruncatingRemainder(dividingBy: 60.0)) }
     
     /// The standard description of the Second
-    public var description: String { return String(format: "%.2f sec", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) sec" }
 }
 

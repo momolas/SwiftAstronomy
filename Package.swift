@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -41,7 +41,8 @@ let package = Package(
                 .process("SwiftAstronomy.docc")
             ],
             swiftSettings: [
-                .interoperabilityMode(.Cxx)
+                .interoperabilityMode(.Cxx),
+                .swiftLanguageMode(.v6)
             ]
         ),
         .testTarget(
@@ -50,7 +51,8 @@ let package = Package(
             path: "Tests/SwiftAstronomyTests",
             exclude: ["SwiftAstronomyTests-Info.plist"],
             swiftSettings: [
-                .interoperabilityMode(.Cxx)
+                .interoperabilityMode(.Cxx),
+                .swiftLanguageMode(.v6)
             ]
         )
     ],

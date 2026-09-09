@@ -10,7 +10,7 @@ import Foundation
 import AAplus
 
 /// The Saturn planet.
-public class Saturn: Planet {
+public final class Saturn: Planet, @unchecked Sendable {
     
     /// The average color of the planet.
     public class override var averageColor: CelestialColor {

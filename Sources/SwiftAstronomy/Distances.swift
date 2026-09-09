@@ -39,7 +39,7 @@ public struct AstronomicalUnit: NumericType, CustomStringConvertible {
         return Degree(CAAParallax.DistanceToParallax(value)).inArcSeconds
     }
 
-    public var description: String { return String(format: "%.2f AU", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(2)))) AU" }
 }
 
 // MARK: -
@@ -58,7 +58,7 @@ public struct Parsec: NumericType, CustomStringConvertible {
     
     /// Transform the current Parsec in AstronomicalUnits
     public var inAstronomicalUnits: AstronomicalUnit { return AstronomicalUnit(value / AU2pc) }
-    public var description: String { return String(format: "%.1f pc", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(1)))) pc" }
 
     /// Returns the parallax value corresponding to the current distance.
     ///
@@ -90,7 +90,7 @@ public struct Meter: NumericType, CustomStringConvertible {
     /// Transform the current Meter in AstronomicalUnit.
     public var inAstronomicalUnits: AstronomicalUnit { return AstronomicalUnit(value / AU2m) }
 
-    public var description: String { return String(format: "%.1f m", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(1)))) m" }
 }
 
 /// The Kilometer is a unit of distance.
@@ -107,7 +107,7 @@ public struct Kilometer: NumericType, CustomStringConvertible {
     
     /// Transform the current Kilometer in Meter
     public var inMeters: Meter { return Meter(value * 1000.0) }
-    public var description: String { return String(format: "%.1f km", value) }
+    public var description: String { return "\(value.formatted(.number.precision(.fractionLength(1)))) km" }
 }
 
 
