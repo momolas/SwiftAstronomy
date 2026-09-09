@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftAA",
+    name: "SwiftAstronomy",
     defaultLocalization: "en",
     platforms: [
         .macOS(.v10_15),
@@ -14,7 +14,7 @@ let package = Package(
         // The C++ astronomical algorithms library by J.P. Naughter
         .library(name: "AAplus", targets: ["AAplus"]),
         // The Swift wrapper API
-        .library(name: "SwiftAA", targets: ["SwiftAA"])
+        .library(name: "SwiftAstronomy", targets: ["SwiftAstronomy"])
     ],
     targets: [
         // MARK: - C++ Core
@@ -33,22 +33,22 @@ let package = Package(
 
         // MARK: - Swift API
         .target(
-            name: "SwiftAA",
+            name: "SwiftAstronomy",
             dependencies: ["AAplus"],
-            path: "Sources/SwiftAA",
-            exclude: ["SwiftAA-Info.plist"],
+            path: "Sources/SwiftAstronomy",
+            exclude: ["SwiftAstronomy-Info.plist", "SwiftAA.playground"],
             resources: [
-                .process("SwiftAA.docc")
+                .process("SwiftAstronomy.docc")
             ],
             swiftSettings: [
                 .interoperabilityMode(.Cxx)
             ]
         ),
         .testTarget(
-            name: "SwiftAATests",
-            dependencies: ["SwiftAA"],
-            path: "Tests/SwiftAATests",
-            exclude: ["SwiftAATests-Info.plist"],
+            name: "SwiftAstronomyTests",
+            dependencies: ["SwiftAstronomy"],
+            path: "Tests/SwiftAstronomyTests",
+            exclude: ["SwiftAstronomyTests-Info.plist"],
             swiftSettings: [
                 .interoperabilityMode(.Cxx)
             ]
