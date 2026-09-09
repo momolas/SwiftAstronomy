@@ -21,10 +21,6 @@ let package = Package(
         .target(
             name: "AAplus",
             path: "Sources/AA+",
-            exclude: [
-                "AAVSOP2013.h",
-                "AAVSOP2013.cpp"
-            ],
             publicHeadersPath: ".",
             cxxSettings: [
                 .headerSearchPath(".")
@@ -47,12 +43,15 @@ let package = Package(
         ),
         .testTarget(
             name: "SwiftAstronomyTests",
-            dependencies: ["SwiftAstronomy"],
+            dependencies: ["SwiftAstronomy", "AAplus"],
             path: "Tests/SwiftAstronomyTests",
             exclude: ["SwiftAstronomyTests-Info.plist"],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
                 .swiftLanguageMode(.v6)
+            ],
+            linkerSettings: [
+                .linkedLibrary("c++")
             ]
         )
     ],
