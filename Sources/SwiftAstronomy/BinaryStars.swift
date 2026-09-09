@@ -13,7 +13,7 @@ public typealias MeanSolarYear = Double
 public typealias DecimalYear = Double
 
 /// The BinaryStarOrbitalElements struct encompasses all orbital elements of a binary star.
-public struct BinaryStarOrbitalElements {
+public struct BinaryStarOrbitalElements: Sendable, Codable, Hashable {
     /// The revolution (orbital) period
     public private(set) var revolutionPeriod: MeanSolarYear
     /// The time of periastron
@@ -56,7 +56,7 @@ public struct BinaryStarOrbitalElements {
 }
 
 /// The BinaryStarDetails struct encompasses elements of a binary star.
-public struct BinaryStarDetails {
+public struct BinaryStarDetails: Sendable, Codable, Hashable {
     /// The radius vector
     public private(set) var radiusVector: ArcSecond
     /// The apparent position angle

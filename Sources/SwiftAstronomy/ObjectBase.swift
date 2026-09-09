@@ -10,7 +10,7 @@ import Foundation
 
 /// Base protocol used by all types of astronomical objects considered in SwiftAA,
 /// planets, moons, the Earth, the Sun etc.
-public protocol ObjectBase {
+public protocol ObjectBase: Sendable {
     
     /// The julian day at which one considers the object.
     var julianDay: JulianDay { get }
@@ -31,12 +31,12 @@ public protocol ObjectBase {
 }
 
 /// The base class of all objects (Planets, Sun, Moons etc.).
-open class Object : ObjectBase {
+open class Object : ObjectBase, @unchecked Sendable {
     /// The Julian Day at which the object is considered.
-    public fileprivate(set) var julianDay: JulianDay
+    public let julianDay: JulianDay
     
     /// The precision flag.
-    public fileprivate(set) var highPrecision: Bool
+    public let highPrecision: Bool
     
     /// A convenience accesor returning the name of the object class.
     public var name: String {

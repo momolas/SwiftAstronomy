@@ -15,7 +15,7 @@ import Foundation
     import AppKit
     public typealias CelestialColor=NSColor
 #else
-    public struct CelestialColor: Equatable, Hashable {
+    public struct CelestialColor: Equatable, Hashable, Sendable {
         public static let white = CelestialColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 
         public let red: Double
@@ -32,7 +32,7 @@ import Foundation
     }
 #endif
 
-#if os(OSX)
+#if os(macOS)
     extension NSColor {
         convenience init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
             self.init(calibratedRed: red, green: green, blue: blue, alpha: alpha)

@@ -93,7 +93,7 @@ public struct JewishDate: Sendable, Codable, Hashable, CustomStringConvertible {
 }
 
 /// Easter calculation utilities.
-public struct Easter {
+public struct Easter: Sendable {
     
     /// Computes the date of Easter Sunday for a given year.
     /// - Parameters:

@@ -18,7 +18,7 @@ public typealias JupiterEquatorialRadius = Double
 /// X is measured positively to the west of Jupiter, the axis coinciding with equator of the planet.
 /// Y is measured positively to the north, the axis coinciding with the rotation axis of the planet.
 /// Z is negative if the satellite is closer to the Earth than Jupiter, and positive otherwise.
-public struct GalileanMoonRectangularCoordinates {
+public struct GalileanMoonRectangularCoordinates: Sendable, Codable, Hashable {
     public fileprivate(set) var X: JupiterEquatorialRadius
     public fileprivate(set) var Y: JupiterEquatorialRadius
     public fileprivate(set) var Z: Double
@@ -31,7 +31,7 @@ public struct GalileanMoonRectangularCoordinates {
 }
 
 /// The GalileanMoon struct encompasses all properties of Galilean moons
-public struct GalileanMoon {
+public struct GalileanMoon: @unchecked Sendable {
     fileprivate var details: CAAGalileanMoonDetail
 
     /// The name of the Moon

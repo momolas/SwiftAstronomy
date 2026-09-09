@@ -121,7 +121,7 @@ public enum Equinox: CustomStringConvertible, Sendable, Codable, Hashable {
 /// - summer: Summer
 /// - autumn: Autumn
 /// - winter: Winter
-public enum Season: Sendable {
+public enum Season: Sendable, Codable, Hashable, CaseIterable {
     case spring
     case summer
     case autumn
@@ -135,7 +135,7 @@ public enum Season: Sendable {
 /// - firstQuarter: First Quarter
 /// - full: Full Moon
 /// - lastQuarter: Last Quarter
-public enum MoonPhase: Sendable {
+public enum MoonPhase: Sendable, Codable, Hashable, CaseIterable {
     case newMoon
     case firstQuarter
     case fullMoon

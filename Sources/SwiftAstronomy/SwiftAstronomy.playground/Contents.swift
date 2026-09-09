@@ -1,4 +1,4 @@
-import SwiftAA
+import SwiftAstronomy
 import CoreLocation
 
 var str = "Hello, playground"

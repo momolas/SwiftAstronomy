@@ -9,7 +9,7 @@
 import Foundation
 import AAplus
 
-public enum TwilightSunAltitude: Degree {
+public enum TwilightSunAltitude: Degree, Sendable, Codable, Hashable {
     case diskCenterOnGeometricHorizon = 0
     case upperLimbOnGeometricHorizon = -0.25
     case riseAndSet = -0.5833333333333333333333 // -35/60 // diskCenterOnHorizonWithRefraction
@@ -24,7 +24,7 @@ public enum TwilightSunAltitude: Degree {
 ///
 /// - northwardSpring: Spring in northern hemisphere (~March)
 /// - southwardSpring: Spring in southern hemisphere (~September)
-public enum EarthEquinoxType: Int {
+public enum EarthEquinoxType: Int, Sendable, Codable, Hashable, CaseIterable {
     case northwardSpring
     case southwardSpring
 }
@@ -34,7 +34,7 @@ public enum EarthEquinoxType: Int {
 ///
 /// - northernSummer: Summer in the northern hemisphere (~June)
 /// - southernSummer: Summer in the northern hemisphere (~December)
-public enum EarthSolsticeType: Int {
+public enum EarthSolsticeType: Int, Sendable, Codable, Hashable, CaseIterable {
     case northernSummer
     case southernSummer
 }

@@ -17,7 +17,7 @@ public typealias MeterE9 = Double
 
 
 /// Base constants to be used for all planets.
-public protocol PlanetConstants {
+public protocol PlanetConstants: Sendable {
     var mass: Kilogram { get }
     var diameter: Meter { get }
     var density: KilogramPerCubicMeter { get }
@@ -41,7 +41,7 @@ public protocol PlanetConstants {
 }
 
 /// The constants for the Jupiter planet.
-public struct JupiterConstants: PlanetConstants {
+public struct JupiterConstants: PlanetConstants, Sendable {
     public let mass: Kilogram = 1.898e27
     public let diameter: Meter = 142984000.0
     public let density: KilogramPerCubicMeter = 1326.0

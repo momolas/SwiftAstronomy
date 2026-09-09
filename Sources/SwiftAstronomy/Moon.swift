@@ -27,7 +27,7 @@ import Foundation
 /// in the almanacs, are the geocentric selenographic coordinates of the apparent
 /// central point of the disk. At this point on the surface of the Moon,
 /// the Earth is in the zenith.
-public struct SelenographicCoordinates {
+public struct SelenographicCoordinates: Sendable, Codable, Hashable {
     /// Selenographic longitude are measured from the lunar meridian that passes
     /// through the mean center of the apparent disk, positive in the direction of
     /// towards Mare Crisium, that is towards the west of geocentric celestial

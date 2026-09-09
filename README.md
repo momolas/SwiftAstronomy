@@ -1,36 +1,24 @@
-<p align="center">
-<b>SwiftAA</b> &bull;
-<a href="https://github.com/onekiloparsec/aa-js">aa-js</a> &bull;
-<a href="https://github.com/onekiloparsec/QLFits">QLFits</a>
-</p>
+# SwiftAstronomy
 
-SwiftAA
-============
-
-![](https://img.shields.io/badge/Swift-5.9%20%7C%206.0-blue.svg?style=flat)
+![](https://img.shields.io/badge/Swift-5.10%20%7C%206.0-blue.svg?style=flat)
 ![](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-lightgrey.svg)
 ![](https://img.shields.io/badge/licence-MIT-blue.svg)
-[![CI](https://github.com/onekiloparsec/SwiftAA/actions/workflows/ci.yml/badge.svg)](https://github.com/onekiloparsec/SwiftAA/actions/workflows/ci.yml)
 
 *The most comprehensive collection of accurate astronomical algorithms in modern Swift.* 
 
-Other implementations: [C# (AASharp)](https://github.com/jsauve/AASharp), and [JavaScript (aa-js)](https://github.com/onekiloparsec/aa-js).
-
 Description
-=======
+===========
 
-SwiftAA provides everything you need to build our Solar System, compute length of seasons, moon phases, determine rise, transit and set times, get positions of planetary moons, transform coordinates, determine physical details of planets, their illumination, distance, eclipses, calendars, etc., with professional-grade accuracy.
-
-**SwiftAA is used in production apps**, including apps by [Vaonis](https://vaonis.com) (creators of smart telescopes like Stellina and Vespera) and [MeteorActive](https://itunes.apple.com/us/app/meteoractive/id1205712190?mt=8).
+**SwiftAstronomy** provides everything you need to compute planetary orbits, solar & lunar eclipses, length of seasons, moon phases, rise/transit/set times, Galilean moons of Jupiter, Saturn's rings, coordinate transformations, religious & lunisolar calendars (Hijri, Jewish, Easter), crescent visibility (*Hilal*), atmospheric air mass, and observation windows with professional-grade accuracy.
 
 ### Architecture & Direct C++ Interoperability
 
-SwiftAA directly leverages **Swift 5.9+ C++ Interoperability (`.interoperabilityMode(.Cxx)`)** atop **AA+ v2.63**, the C++ implementation by P.J. Naughter of the reference textbook *Astronomical Algorithms* by Jean Meeus (2nd ed.). 
+SwiftAstronomy directly leverages **Swift C++ Interoperability (`.interoperabilityMode(.Cxx)`)** atop **AA+ v2.63**, the C++ implementation by P.J. Naughter of the reference textbook *Astronomical Algorithms* by Jean Meeus (2nd ed.). 
 
-- **Zero-cost bridge**: Direct C++ calls with zero runtime wrapper overhead.
-- **Swift 6 & Strict Concurrency ready**: Built with complete concurrency checking support.
-- **Strong Unit Safety**: Type-safe structures for `Degree`, `ArcSecond`, `Hour`, `JulianDay`, `AstronomicalUnit`, `Kilometer`, etc.
-- **High Test Coverage**: Comprehensive suite using both `XCTest` and modern `Swift-Testing` (`@Test`, `@Suite`).
+- **Zero-cost bridge**: Direct C++17 calls with zero runtime wrapper overhead.
+- **Swift 6 & Strict Concurrency ready**: Complete `Sendable` support across astronomical objects, coordinates, and events.
+- **Strong Unit Safety**: Type-safe dimensional structures for `Degree`, `ArcSecond`, `Hour`, `JulianDay`, `AstronomicalUnit`, `Kilometer`, etc.
+- **High Test Coverage**: Comprehensive test suite using both `XCTest` and modern `Swift-Testing` (`@Test`, `@Suite`).
 
 ---
 
@@ -40,7 +28,7 @@ Features & Examples
 ### 1. Planets & Solar System Bodies
 
 ```swift
-import SwiftAA
+import SwiftAstronomy
 
 // Target date: standard J2000 epoch
 let jd = JulianDay(year: 2024, month: 4, day: 8, hour: 18, minute: 17)
@@ -149,10 +137,10 @@ let mLength: Measurement<UnitLength> = 1.0.AU.measurement
 Documentation
 =============
 
-SwiftAA includes full **Apple DocC** documentation. You can preview it in your browser with:
+SwiftAstronomy includes full **Apple DocC** documentation. You can preview it in your browser with:
 
 ```bash
-swift package --disable-sandbox preview-documentation --target SwiftAA
+swift package --disable-sandbox preview-documentation --target SwiftAstronomy
 ```
 
 Or build the documentation in Xcode via **Product > Build Documentation**.
@@ -162,15 +150,15 @@ Or build the documentation in Xcode via **Product > Build Documentation**.
 Installation
 ============
 
-Add SwiftAA as a dependency in your `Package.swift`:
+Add SwiftAstronomy as a dependency in your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/onekiloparsec/SwiftAA.git", from: "3.0.1")
+    .package(url: "https://github.com/momolas/SwiftAstronomy.git", branch: "master")
 ]
 ```
 
-Or add it directly in Xcode via **File > Add Package Dependencies...** and search for `SwiftAA`.
+Or add it directly in Xcode via **File > Add Package Dependencies...** with `https://github.com/momolas/SwiftAstronomy.git`.
 
 ---
 
@@ -179,7 +167,7 @@ AA+ Core
 
 The AA+ framework, written in C++ by PJ Naughter (Visual C++ MVP), is the comprehensive implementation of the algorithms in Jean Meeus' reference textbook *Astronomical Algorithms*. 
 
-SwiftAA integrates **AA+ v2.63** (released May 2025) directly as a C++ SPM module target (`AAplus`).
+SwiftAstronomy integrates **AA+ v2.63** (released May 2025) directly as a C++ SPM module target (`AAplus`).
 
 ---
 

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Methods to compute relative optical air mass and astronomical observation windows.
-public struct AtmosphericAirMass {
+public struct AtmosphericAirMass: Sendable {
     
     /// Computes the relative optical air mass using Pickering's (2002) formula.
     /// Air mass is normalized to 1.0 at the zenith (true altitude = 90°).

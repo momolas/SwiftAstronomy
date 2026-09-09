@@ -82,7 +82,7 @@ public struct ParabolicOrbitDetails: Sendable, Codable, Hashable {
 }
 
 /// Helper methods for parabolic orbits.
-public struct ParabolicOrbit {
+public struct ParabolicOrbit: Sendable {
     
     /// Calculate details of a parabolic object at a given Julian Day.
     /// - Parameters:

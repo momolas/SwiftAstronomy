@@ -103,7 +103,7 @@ public struct LunarEclipseDetails: Sendable, Codable, Hashable {
 }
 
 /// Solar & Lunar Eclipse prediction helper.
-public struct Eclipses {
+public struct Eclipses: Sendable {
     
     /// Calculate solar eclipse characteristics for a given lunation index k.
     /// - Parameter k: Lunation index (integer for New Moon).

@@ -24,7 +24,7 @@ import AAplus
 ///
 /// Additional data can be taken from this source (referenced by Wikipedia):
 /// http://nssdc.gsfc.nasa.gov/planetary/factsheet/saturniansatfact.html
-public struct SaturnianMoon {
+public struct SaturnianMoon: @unchecked Sendable {
     fileprivate var details: CAASaturnMoonDetail
 
     /// The name of the Moon

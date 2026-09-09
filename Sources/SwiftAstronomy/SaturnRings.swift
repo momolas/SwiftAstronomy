@@ -10,7 +10,7 @@ import Foundation
 import AAplus
 
 /// Saturnicentric coordinates are centered on Saturn.
-public struct SaturnicentricCoordinates {
+public struct SaturnicentricCoordinates: Sendable, Codable, Hashable {
     public init(longitude: Degree, latitude: Degree) {
         self.longitude = longitude
         self.latitude = latitude
@@ -26,7 +26,7 @@ public struct SaturnicentricCoordinates {
 
 
 //// Saturn has many rings. Here we consider the ring system as a whole.
-public struct SaturnRingSystem {
+public struct SaturnRingSystem: @unchecked Sendable {
     fileprivate var details: CAASaturnRingDetails
     public fileprivate(set) var julianDay: JulianDay
     
