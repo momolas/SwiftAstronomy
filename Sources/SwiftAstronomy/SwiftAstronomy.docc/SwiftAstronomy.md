@@ -25,8 +25,22 @@ Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the al
 
 - <doc:HilalVisibility>
 - <doc:CoordinatesAndTransformations>
+- <doc:StandardsAndReductions>
 - <doc:RiseTransitSetTimes>
 - <doc:PlanetsAndMoons>
+
+### Global Standards & Vector Astrometry
+
+- ``Vector3D``
+- ``StateVector``
+- ``AstrometryReductions``
+- ``AstronomicalTimeScale``
+- ``ModernReferenceFrames``
+
+### Artificial Satellite Tracking (SGP4)
+
+- ``TwoLineElements``
+- ``SatellitePropagator``
 
 ### Modern Value-Type Ephemerides
 

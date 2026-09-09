@@ -1,7 +1,7 @@
 # SwiftAstronomy
 
-![](https://img.shields.io/badge/Swift-5.10%20%7C%206.0-blue.svg?style=flat)
-![](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-lightgrey.svg)
+![](https://img.shields.io/badge/Swift-6.0%20%7C%206.2-blue.svg?style=flat)
+![](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20watchos%20%7C%20tvos%20%7C%20visionos%20%7C%20linux-lightgrey.svg)
 ![](https://img.shields.io/badge/licence-MIT-blue.svg)
 
 *The most comprehensive collection of accurate astronomical algorithms in modern Swift.* 
@@ -11,14 +11,20 @@ Description
 
 **SwiftAstronomy** provides everything you need to compute planetary orbits, solar & lunar eclipses, length of seasons, moon phases, rise/transit/set times, Galilean moons of Jupiter, Saturn's rings, coordinate transformations, religious & lunisolar calendars (Hijri, Jewish, Easter), crescent visibility (*Hilal*), atmospheric air mass, and observation windows with professional-grade accuracy.
 
+In addition to classical analytical models (Meeus, VSOP87, ELP2000), SwiftAstronomy incorporates the core algorithms of **international reference standards**:
+- **USNO NOVAS** : 3D Cartesian vector astrometry (`Vector3D`, `StateVector`), Einstein gravitational light deflection, and relativistic stellar aberration.
+- **IAU SOFA** : Modern time scales (`UT1`, `UTC`, `TAI`, `TT`, `TDB`), $\Delta T$ (Espenak & Meeus 2006), Earth Rotation Angle (ERA IAU 2000), and CIRS $\leftrightarrow$ TIRS coordinate rotations.
+- **NORAD SGP4** : Artificial satellite orbit propagation from standard Two-Line Element (TLE) sets, with topocentric observer look angles (altitude, azimuth, distance).
+
 ### Architecture & Direct C++ Interoperability
 
 SwiftAstronomy directly leverages **Swift C++ Interoperability (`.interoperabilityMode(.Cxx)`)** atop **AA+ v2.63**, the C++ implementation by P.J. Naughter of the reference textbook *Astronomical Algorithms* by Jean Meeus (2nd ed.). 
 
-- **Zero-cost bridge**: Direct C++17 calls with zero runtime wrapper overhead.
-- **Swift 6 & Strict Concurrency ready**: Complete `Sendable` support across astronomical objects, coordinates, and events.
+- **Zero-cost bridge**: Direct C++ calls with zero runtime wrapper overhead.
+- **Swift 6 & Strict Concurrency ready**: 100% data-race safe, pure `Sendable` value types across astronomical objects, coordinates, and events.
+- **Autonomous & Zero External Dependencies**: Runs entirely offline without external kernels, binary files, or network calls.
 - **Strong Unit Safety**: Type-safe dimensional structures for `Degree`, `ArcSecond`, `Hour`, `JulianDay`, `AstronomicalUnit`, `Kilometer`, etc.
-- **High Test Coverage**: Comprehensive test suite using both `XCTest` and modern `Swift-Testing` (`@Test`, `@Suite`).
+- **High Test Coverage**: Over 238 unit tests combining `XCTest` and modern `Swift-Testing` (`@Test`, `@Suite`).
 
 ---
 
@@ -216,6 +222,64 @@ struct AstronomyView: View {
     }
 }
 #endif
+```
+
+### 13. Vector Astrometry & Relativistic Deflection (USNO NOVAS)
+
+```swift
+// 3D Cartesian coordinates with full vector arithmetic
+let starDirection = Vector3D.fromSpherical(ra: 45.0, dec: 30.0, distance: 1.0)
+let earthPos = Vector3D(x: 1.0, y: 0.0, z: 0.0) // 1 AU from Sun
+
+// Einstein gravitational light deflection near the Sun
+let deflected = AstrometryReductions.gravitationalDeflection(bodyPos: starDirection, earthPos: earthPos)
+
+// Relativistic stellar aberration
+let earthVelocity = Vector3D(x: 0.0, y: 0.0172, z: 0.0) // AU/day
+let apparent = AstrometryReductions.aberration(direction: starDirection, observerVelocity: earthVelocity)
+```
+
+### 14. Modern Reference Frames & Time Scales (IAU SOFA)
+
+```swift
+let jdUTC = 2451545.0 // J2000.0
+
+// Compute Delta T (TT - UT1) and convert UTC to Terrestrial Time (TT)
+let deltaTSeconds = AstronomicalTimeScale.deltaT(for: jdUTC) // ~64.09s
+let jdTT = AstronomicalTimeScale.utcToTT(jdUTC: jdUTC)
+
+// Earth Rotation Angle (ERA IAU 2000)
+let era = ModernReferenceFrames.earthRotationAngleDegrees(jdUT1: jdUTC)
+
+// CIRS to TIRS intermediate frame rotation
+let cirsVector = Vector3D(x: 1.0, y: 0.0, z: 0.0)
+let tirsVector = ModernReferenceFrames.cirsToTirs(cirsVector: cirsVector, jdUT1: jdUTC)
+```
+
+### 15. Satellite Tracking & TLE (NORAD SGP4)
+
+```swift
+let issTLE = [
+    "ISS (ZARYA)",
+    "1 25544U 98067A   24001.50000000  .00016717  00000-0  10270-3 0  9001",
+    "2 25544  51.6400 208.1000 0004500  75.3000 284.8000 15.49800000432105"
+]
+
+guard let tle = TwoLineElements.parse(lines: issTLE) else { return }
+print("Semi-major axis:", tle.semiMajorAxisKm, "km")
+
+// Propagate orbit to current date
+let now = Date()
+let state = SatellitePropagator.propagate(tle: tle, to: now)
+
+// Compute topocentric look angles for ground observer
+let look = SatellitePropagator.lookAngles(
+    state: state,
+    observerLatitude: 48.8566, // Paris
+    observerLongitude: 2.3522,
+    date: now
+)
+print("Altitude: \(look.altitude)°, Azimuth: \(look.azimuth)°, Range: \(look.distanceKm) km")
 ```
 
 ---
