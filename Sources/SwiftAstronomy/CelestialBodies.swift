@@ -170,5 +170,21 @@ public extension CelestialBody {
             return (value: Radian(acos(cost)).inDegrees, error: nil)
         }
     }
+
+    /// Computes the angular separation between this celestial body and another celestial body.
+    ///
+    /// - Parameter other: The other celestial body.
+    /// - Returns: The angular distance in degrees.
+    func angularSeparation(from other: any CelestialBody) -> Degree {
+        return self.equatorialCoordinates.angularSeparation(with: other.equatorialCoordinates)
+    }
+
+    /// Computes the position angle of this celestial body relative to another celestial body.
+    ///
+    /// - Parameter other: The reference celestial body.
+    /// - Returns: The position angle in degrees.
+    func positionAngle(relativeTo other: any CelestialBody) -> Degree {
+        return self.equatorialCoordinates.positionAngle(relativeTo: other.equatorialCoordinates)
+    }
 }
 

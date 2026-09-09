@@ -1,12 +1,12 @@
-# ``SwiftAA``
+# ``SwiftAstronomy``
 
 The most comprehensive collection of accurate astronomical algorithms in Swift.
 
 ## Overview
 
-**SwiftAA** provides modern, expressive, and type-safe Swift APIs for astronomical calculations, ephemerides, celestial mechanics, and observational astronomy.
+**SwiftAstronomy** provides modern, expressive, and type-safe Swift APIs for astronomical calculations, ephemerides, celestial mechanics, and observational astronomy.
 
-Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the algorithms of **Jean Meeus** (*Astronomical Algorithms*, 2nd ed.), along with the **VSOP87** planetary theory and **ELP/MPP02** lunar theory, SwiftAA provides professional-grade accuracy with the safety and elegance of modern Swift.
+Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the algorithms of **Jean Meeus** (*Astronomical Algorithms*, 2nd ed.), along with the **VSOP87** planetary theory and **ELP/MPP02** lunar theory, SwiftAstronomy provides professional-grade accuracy with the safety and elegance of modern Swift.
 
 ### Key Features
 
@@ -16,6 +16,8 @@ Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the al
 - **Moons & Planetary Details**: Galilean moons of Jupiter, moons and rings of Saturn, planetary physical details, illuminated fractions, and magnitudes.
 - **Events & Phenomena**: Rise, transit, and set times, twilights, seasons, equinoxes, solstices, eclipses, conjunctions, and oppositions.
 - **Hilal & Crescent Visibility**: Islamic crescent moon visibility predictions using Odeh (2006), Yallop (1997), Danjon limit, Istanbul, and MABIMS criteria.
+- **Meteor Showers**: Catalog of major annual showers with radiant coordinates, peak times, and lunar interference ratings.
+- **SwiftUI & Modern Formatting**: Native SwiftUI `Angle` conversions, `FormatStyle` sexagesimal and right ascension formatting.
 
 ## Topics
 
@@ -25,6 +27,11 @@ Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the al
 - <doc:CoordinatesAndTransformations>
 - <doc:RiseTransitSetTimes>
 - <doc:PlanetsAndMoons>
+
+### Modern Value-Type Ephemerides
+
+- ``SolarSystemBody``
+- ``EphemerisSnapshot``
 
 ### Celestial Bodies
 
@@ -39,6 +46,17 @@ Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the al
 - ``Uranus``
 - ``Neptune``
 - ``Pluto``
+
+### Moon Phases & Quarters
+
+- ``LunarPhase``
+- ``MoonPhase``
+- ``MoonPhaseEvent``
+
+### Meteor Showers
+
+- ``MeteorShower``
+- ``MeteorObservationRating``
 
 ### Crescent Visibility (Hilal)
 
@@ -62,8 +80,12 @@ Built upon the reference C++ engine **AA+** (by PJ Naughter) implementing the al
 - ``RiseTransitSetTimes``
 - ``RiseTransitSetTimesDetails``
 - ``CelestialBodyTransitError``
-- ``MoonPhase``
 - ``Season``
+
+### Formatting & Interoperability
+
+- ``SexagesimalFormatStyle``
+- ``RightAscensionFormatStyle``
 
 ### Numerical & Unit Types
 

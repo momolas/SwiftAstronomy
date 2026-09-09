@@ -132,6 +132,92 @@ let mAngle: Measurement<UnitAngle> = 45.0.degrees.measurement
 let mLength: Measurement<UnitLength> = 1.0.AU.measurement
 ```
 
+### 8. Value-Type Solar System Ephemerides
+
+```swift
+// Fast, immutable, Sendable snapshot of any body
+let snapshot = SolarSystemBody.mars.ephemeris(at: jd)
+print(snapshot.body.symbol) // "♂"
+print(snapshot.apparentMagnitude) // -1.2
+print(snapshot.radiusVector) // Distance to Sun in AU
+
+// Instant access to all bodies for UI lists & SwiftUI Pickers
+for body in SolarSystemBody.allCases {
+    let ephem = body.ephemeris(at: jd)
+    print("\(body.symbol) \(body.name): \(ephem.radiusVector)")
+}
+```
+
+### 9. Moon Phases & Exact Quarters
+
+```swift
+// 8-Phase classification (🌑, 🌒, 🌓, 🌔, 🌕, 🌖, 🌗, 🌘)
+let currentPhase = moon.lunarPhase
+print(currentPhase.symbol) // e.g. "🌔"
+print(currentPhase.name)   // "Waxing Gibbous"
+print(currentPhase.isWaxing) // true
+
+// Predict exact Julian Day of the next Full Moon or New Moon
+let nextFullMoon = Moon.nextPhase(.fullMoon, after: jd)
+print("Next Full Moon:", nextFullMoon.date)
+
+// List all quarters within a date range
+let nextMonth = jd + 30
+let events = Moon.phases(from: jd, to: nextMonth)
+for event in events {
+    print("\(event.phase.symbol) \(event.phase.name) on \(event.julianDay.date)")
+}
+```
+
+### 10. Universal Angular Separation & Conjunctions
+
+```swift
+let venus = Venus(julianDay: jd)
+let jupiter = Jupiter(julianDay: jd)
+
+// Measure apparent sky separation between any two celestial bodies
+let sep = venus.angularSeparation(from: jupiter)
+let posAngle = venus.positionAngle(relativeTo: jupiter)
+print("Separation: \(sep.formatted(.sexagesimal))")
+```
+
+### 11. Annual Meteor Showers Catalog
+
+```swift
+let perseids = MeteorShower.perseids
+print("Perseids peak:", perseids.peakMonth, "/", perseids.peakDay)
+print("ZHR:", perseids.zhr) // 100 meteors/hour
+print("Parent:", perseids.parentBody) // "109P/Swift-Tuttle"
+
+// Evaluate moonlight interference for a specific year
+let rating = perseids.observationRating(year: 2026)
+print(rating.description) // e.g. "Favorable (Dark skies, minimal moonlight)"
+```
+
+### 12. Native SwiftUI Integration
+
+```swift
+#if canImport(SwiftUI)
+import SwiftUI
+
+// Seamless SwiftUI Angle conversion
+let heading: SwiftUI.Angle = 45.0.degrees.asSwiftUIAngle
+let reconstructedDeg = Degree(heading)
+
+// Declarative Text formatting in views
+struct AstronomyView: View {
+    let moonDeclination = Degree(-23.44)
+
+    var body: some View {
+        VStack {
+            Text(moonDeclination, format: .sexagesimal)
+            Text(Hour(14.5), format: .rightAscension)
+        }
+    }
+}
+#endif
+```
+
 ---
 
 Documentation
