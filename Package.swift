@@ -36,7 +36,7 @@ let package = Package(
             name: "SwiftAstronomy",
             dependencies: ["AAplus"],
             path: "Sources/SwiftAstronomy",
-            exclude: ["SwiftAstronomy-Info.plist", "SwiftAstronomy.playground"],
+            exclude: ["SwiftAstronomy-Info.plist"],
             resources: [
                 .process("SwiftAstronomy.docc")
             ],
