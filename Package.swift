@@ -32,7 +32,6 @@ let package = Package(
             name: "SwiftAstronomy",
             dependencies: ["AAplus"],
             path: "Sources/SwiftAstronomy",
-            exclude: ["SwiftAstronomy-Info.plist"],
             resources: [
                 .process("SwiftAstronomy.docc")
             ],
@@ -45,7 +44,6 @@ let package = Package(
             name: "SwiftAstronomyTests",
             dependencies: ["SwiftAstronomy", "AAplus"],
             path: "Tests/SwiftAstronomyTests",
-            exclude: ["SwiftAstronomyTests-Info.plist"],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
                 .swiftLanguageMode(.v6)
